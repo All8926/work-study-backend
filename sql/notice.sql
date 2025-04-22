@@ -1,0 +1,4 @@
+
+use work_study;
+
+insert into `notice` (`id`, `title`, `publishTime`, `content`, `status`, `userId`, `createTime`, `updateTime`, `isDelete`) values('1','平台规范','2025-04-22 21:00:22','<p style=\"text-align: start;\"><strong>诚信原则</strong>：所有用户在使用本平台时应遵守诚信原则，提供真实、有效的信息。任何虚假信息一经发现，将立即被删除，并可能影响用户的使用权限。</p><p style=\"text-align: start;\"><strong>尊重他人</strong>：请确保您的行为和言论不会侵犯他人的合法权益，包括但不限于隐私权、知识产权等。尊重其他用户的工作机会和努力成果。</p><p style=\"text-align: start;\"><strong>安全保护</strong>：用户需妥善保管个人账户信息，不得将账号转借或售卖给第三方。若发现账号异常，请及时联系平台客服。</p><p style=\"text-align: start;\"><strong>岗位发布规范</strong>：用工单位发布的岗位信息必须真实、明确，包括工作内容、时间安排及薪酬待遇等，严禁发布违法、违规或不道德的岗位需求。</p><p style=\"text-align: start;\"><strong>反馈与投诉机制</strong>：鼓励用户对平台服务提出宝贵意见或进行合理投诉。我们承诺会认真处理每一条反馈，持续改进服务质量。</p><p style=\"text-align: start;\"><strong>公平竞争</strong>：所有学生在申请岗位时享有平等的机会，禁止任何形式的歧视行为或不公平竞争手段。让我们共同维护一个健康、积极的环境。</p>','1','2','2025-04-22 21:00:20','2025-04-22 21:01:27','0');
