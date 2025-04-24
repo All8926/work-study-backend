@@ -27,7 +27,10 @@ create table if not exists `user`
     index idx_userAccount (userAccount)
 ) comment '用户' collate = utf8mb4_unicode_ci;
 
-insert into `user` (`id`, `userAccount`, `userPassword`, `userRole`, `userName`, `nickName`, `userPhone`, `userAvatar`, `userProfile`, `status`, `createTime`, `updateTime`, `isDelete`) values('2','admin','5cf1113b32bbf0dacb4f4262cd3b296c','admin','admin','超级管理员','18596965656',NULL,NULL,'1','2025-04-22 20:34:55','2025-04-22 20:37:49','0');
+insert into `user` (`id`, `userAccount`, `userPassword`, `userRole`, `userName`, `nickName`, `userPhone`, `userAvatar`,
+                    `userProfile`, `status`, `createTime`, `updateTime`, `isDelete`)
+values ('2', 'admin', '5cf1113b32bbf0dacb4f4262cd3b296c', 'admin', 'admin', '超级管理员', '18596965656', NULL, NULL,
+        '1', '2025-04-22 20:34:55', '2025-04-22 20:37:49', '0');
 
 
 -- 公告表
@@ -44,3 +47,21 @@ create table if not exists notice
     updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete    tinyint  default 0                 not null comment '是否删除'
 ) comment '公告' collate = utf8mb4_unicode_ci;
+
+
+-- 意见反馈表
+use work_study;
+create table if not exists feedback
+(
+    id               bigint auto_increment comment 'id' primary key,
+    title            varchar(128)                       not null comment '标题',
+    content          text                               null comment '内容',
+    userId           bigint                             not null comment '创建人',
+    status           tinyint  default 0                 not null comment '0-待处理  1-已处理 2-不予处理',
+    responseText     varchar(512)                       null comment '回复内容',
+    responseUserId   bigint                             null comment '回复人id',
+    responseUserName varchar(128)                       null comment '回复人姓名',
+    createTime       datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime       datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete         tinyint  default 0                 not null comment '是否删除'
+) comment '意见反馈' collate = utf8mb4_unicode_ci;
