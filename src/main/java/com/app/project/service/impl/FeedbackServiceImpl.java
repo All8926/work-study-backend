@@ -68,7 +68,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback>
 
         // 排序规则
         queryWrapper.orderBy(SqlUtils.validSortField(sortField),
-                sortOrder.equals(CommonConstant.SORT_ORDER_ASC),
+                sortOrder.equals(CommonConstant.SORT_ORDER_DESC),
                 sortField);
         return queryWrapper;
     }
@@ -81,11 +81,7 @@ public class FeedbackServiceImpl extends ServiceImpl<FeedbackMapper, Feedback>
             return feedbackVOPage;
         }
         // Feedback => FeedbackVO
-        List<FeedbackVO> feedbackVOList = feedbackList.stream().map(item -> {
-            FeedbackVO feedbackVO = new FeedbackVO();
-            BeanUtils.copyProperties(item, feedbackVO);
-            return feedbackVO;
-        }).collect(Collectors.toList());
+        List<FeedbackVO> feedbackVOList = feedbackList.stream().map(FeedbackVO::objToVo).collect(Collectors.toList());
 
         // 1. 关联查询用户信息
         Set<Long> userIdSet = feedbackList.stream().map(Feedback::getUserId).collect(Collectors.toSet());

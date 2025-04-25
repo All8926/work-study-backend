@@ -69,6 +69,9 @@ public class FeedbackController {
         User loginUser = userService.getLoginUser();
         feedback.setUserId(loginUser.getId());
 
+        List<String> image = feedbackAddRequest.getImageList();
+        feedback.setImage(JSONUtil.toJsonStr(image));
+
         // 写入数据库
         boolean result = feedbackService.save(feedback);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
@@ -174,6 +177,11 @@ public class FeedbackController {
         // todo 在此处将实体类和 DTO 进行转换
         Feedback feedback = new Feedback();
         BeanUtils.copyProperties(feedbackEditRequest, feedback);
+
+        List<String> image = feedbackEditRequest.getImageList();
+        if(image != null){
+            feedback.setImage(JSONUtil.toJsonStr(image));
+        }
 
         User loginUser = userService.getLoginUser();
         // 判断是否存在

@@ -33,5 +33,10 @@ public class FeedbackEditRequest implements Serializable {
      */
     private String content;
 
+    /**
+     * 图片
+     */
+    private List<String> imageList;
+
     private static final long serialVersionUID = 1L;
 }

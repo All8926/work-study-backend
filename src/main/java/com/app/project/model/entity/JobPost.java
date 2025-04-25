@@ -7,12 +7,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 意见反馈
- * @TableName feedback
+ * 岗位信息
+ * @TableName job_post
  */
-@TableName(value ="feedback")
+@TableName(value ="job_post")
 @Data
-public class Feedback implements Serializable {
+public class JobPost implements Serializable {
     /**
      * id
      */
@@ -20,44 +20,54 @@ public class Feedback implements Serializable {
     private Long id;
 
     /**
-     * 标题
-     */
-    private String title;
-
-    /**
-     * 内容
-     */
-    private String content;
-
-    /**
-     * 图片
-     */
-    private String image;
-
-    /**
-     * 创建人
+     * 创建人Id
      */
     private Long userId;
 
     /**
-     * 0-待处理  1-已处理 2-不予处理
+     * 岗位名称
+     */
+    private String title;
+
+    /**
+     * 岗位描述
+     */
+    private String description;
+
+    /**
+     * 工资
+     */
+    private String salary;
+
+    /**
+     * 任职要求
+     */
+    private String requirement;
+
+    /**
+     * 工作地点
+     */
+    private String workAddress;
+
+    /**
+     * 招聘人数
+     */
+    private Integer maxCount;
+
+    /**
+     * 截止时间
+     */
+    private Date expirationTime;
+
+    /**
+     * 0-待审核 1-已发布 2-已下线 3-审核不通过
      */
     private Integer status;
 
     /**
-     * 回复内容
+     * 拒绝原因
      */
-    private String responseText;
-
-    /**
-     * 回复人id
-     */
-    private Long responseUserId;
-
-    /**
-     * 回复人姓名
-     */
-    private String responseUserName;
+    private String rejectReason;
 
     /**
      * 创建时间

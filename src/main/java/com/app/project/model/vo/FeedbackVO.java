@@ -1,8 +1,7 @@
 package com.app.project.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.app.project.model.entity.Feedback;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -33,6 +32,12 @@ public class FeedbackVO implements Serializable {
      * 内容
      */
     private String content;
+
+
+    /**
+     * 图片列表
+     */
+    private List<String> imageList;
 
     /**
      * 创建人
@@ -73,6 +78,40 @@ public class FeedbackVO implements Serializable {
      * 更新时间
      */
     private Date updateTime;
+
+
+    /**
+     * 封装类转对象
+     *
+     * @param feedbackVO
+     * @return
+     */
+    public static Feedback voToObj(FeedbackVO feedbackVO) {
+        if (feedbackVO == null) {
+            return null;
+        }
+        Feedback feedback = new Feedback();
+        BeanUtils.copyProperties(feedbackVO, feedback);
+        List<String> tagList = feedbackVO.getImageList();
+        feedback.setImage(JSONUtil.toJsonStr(tagList));
+        return feedback;
+    }
+
+    /**
+     * 对象转封装类
+     *
+     * @param feedback
+     * @return
+     */
+    public static FeedbackVO objToVo(Feedback feedback) {
+        if (feedback == null) {
+            return null;
+        }
+        FeedbackVO feedbackVO = new FeedbackVO();
+        BeanUtils.copyProperties(feedback, feedbackVO);
+        feedbackVO.setImageList(JSONUtil.toList(feedback.getImage(), String.class));
+        return feedbackVO;
+    }
 
 
 }

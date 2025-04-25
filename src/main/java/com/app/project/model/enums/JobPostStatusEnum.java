@@ -7,24 +7,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 文件上传业务类型枚举
+ * 岗位状态枚举
  *
  * @author 
  * @from 
  */
-public enum FileUploadBizEnum {
-
-    USER_AVATAR("用户头像", "user_avatar"),
-    COMPLAINT_IMAGE("意见反馈图片", "feedback"),
-    REPAIR_IMAGE("报修图片", "repairs_image"),
-    NOTICE_IMAGE("公告图片", "notice_image");
+public enum JobPostStatusEnum {
+    /**
+     * 0-待审核 1-已发布 2-已下线 3-审核不通过
+     */
+    IN_REVIEW("审核中", 0),
+    HAVE_PUBLISHED("已发布", 1),
+    NOT_PUBLISHED("已下线", 2),
+    REJECTED("审核不通过", 3);
 
 
     private final String text;
 
-    private final String value;
+    private final Integer value;
 
-    FileUploadBizEnum(String text, String value) {
+    JobPostStatusEnum(String text, Integer value) {
         this.text = text;
         this.value = value;
     }
@@ -34,7 +36,7 @@ public enum FileUploadBizEnum {
      *
      * @return
      */
-    public static List<String> getValues() {
+    public static List<Integer> getValues() {
         return Arrays.stream(values()).map(item -> item.value).collect(Collectors.toList());
     }
 
@@ -44,11 +46,11 @@ public enum FileUploadBizEnum {
      * @param value
      * @return
      */
-    public static FileUploadBizEnum getEnumByValue(String value) {
+    public static JobPostStatusEnum getEnumByValue(String value) {
         if (ObjectUtils.isEmpty(value)) {
             return null;
         }
-        for (FileUploadBizEnum anEnum : FileUploadBizEnum.values()) {
+        for (JobPostStatusEnum anEnum : JobPostStatusEnum.values()) {
             if (anEnum.value.equals(value)) {
                 return anEnum;
             }
@@ -56,7 +58,7 @@ public enum FileUploadBizEnum {
         return null;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 

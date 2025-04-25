@@ -56,6 +56,7 @@ create table if not exists feedback
     id               bigint auto_increment comment 'id' primary key,
     title            varchar(128)                       not null comment '标题',
     content          text                               null comment '内容',
+    image            varchar(1024)                      null comment '图片',
     userId           bigint                             not null comment '创建人',
     status           tinyint  default 0                 not null comment '0-待处理  1-已处理 2-不予处理',
     responseText     varchar(512)                       null comment '回复内容',
@@ -65,3 +66,25 @@ create table if not exists feedback
     updateTime       datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete         tinyint  default 0                 not null comment '是否删除'
 ) comment '意见反馈' collate = utf8mb4_unicode_ci;
+
+-- 岗位信息表
+use work_study;
+create table if not exists job_post
+(
+    id          bigint auto_increment comment 'id' primary key,
+    userId      bigint                             not null comment '创建人Id',
+    title       varchar(256)                       not null comment '岗位名称',
+    description varchar(1024)                      null comment '岗位描述',
+    salary      varchar(128)                       not null comment '工资',
+    requirement varchar(512)                       null comment '任职要求',
+    workAddress  varchar(256)                       null comment '工作地点',
+    maxCount    int                                null comment '招聘人数',
+    expirationTime    datetime                           null comment '截止时间',
+    status      tinyint  default 0                 not null comment '0-待审核 1-已发布 2-已下线 3-审核不通过',
+    rejectReason varchar(256)                      null comment '拒绝原因',
+    createTime  datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete    tinyint  default 0                 not null comment '是否删除'
+) comment '岗位信息' collate = utf8mb4_unicode_ci;
+
+

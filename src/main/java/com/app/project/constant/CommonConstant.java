@@ -17,5 +17,16 @@ public interface CommonConstant {
      * 降序
      */
     String SORT_ORDER_DESC = " descend";
-    
+
+    /**
+     * 通过
+     */
+    Integer RESOLVED_STATUS = 1;
+
+    /**
+     * 拒绝
+     */
+    Integer REJECTED_STATUS = 0;
+
+
 }
