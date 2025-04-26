@@ -35,7 +35,6 @@ public class JobPostVO implements Serializable {
      */
     private UserVO user;
 
-
     /**
      * 岗位名称
      */

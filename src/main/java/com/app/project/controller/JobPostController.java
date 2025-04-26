@@ -10,6 +10,7 @@ import com.app.project.model.dto.jobPost.JobPostAddRequest;
 import com.app.project.model.dto.jobPost.JobPostEditRequest;
 import com.app.project.model.dto.jobPost.JobPostQueryRequest;
 import com.app.project.model.entity.JobPost;
+import com.app.project.model.entity.Notice;
 import com.app.project.model.entity.User;
 import com.app.project.model.enums.AddStatusEnum;
 import com.app.project.model.enums.JobPostStatusEnum;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -197,6 +199,34 @@ public class JobPostController {
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
     }
+
+    /**
+     * 发布/取消公告
+     */
+    @PostMapping("/publish")
+    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> publishJobPost(@RequestBody Integer id) {
+        if (id == null || id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        // 判断是否存在
+        JobPost jobPost = jobPostService.getById(id);
+        ThrowUtils.throwIf(jobPost == null, ErrorCode.NOT_FOUND_ERROR);
+
+        JobPost notice = new JobPost();
+        BeanUtils.copyProperties(jobPost, notice);
+
+        // 状态取反
+        int havePublishedValue = JobPostStatusEnum.HAVE_PUBLISHED.getValue();
+        int not_publishedValue = JobPostStatusEnum.NOT_PUBLISHED.getValue();
+        notice.setStatus(notice.getStatus() == havePublishedValue ? not_publishedValue : havePublishedValue);
+
+        // 操作数据库
+        boolean result = jobPostService.updateById(notice);
+        ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
+        return ResultUtils.success(true);
+    }
+
 
     // endregion
 }

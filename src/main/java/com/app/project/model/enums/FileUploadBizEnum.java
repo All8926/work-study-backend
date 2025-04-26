@@ -16,7 +16,7 @@ public enum FileUploadBizEnum {
 
     USER_AVATAR("用户头像", "user_avatar"),
     COMPLAINT_IMAGE("意见反馈图片", "feedback"),
-    REPAIR_IMAGE("报修图片", "repairs_image"),
+    REPAIR_IMAGE("面试附件", "interview"),
     NOTICE_IMAGE("公告图片", "notice_image");
 
 

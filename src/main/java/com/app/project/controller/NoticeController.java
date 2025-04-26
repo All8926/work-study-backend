@@ -151,7 +151,7 @@ public class NoticeController {
      */
     @PostMapping("/publish")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> publishNotice(@RequestBody Integer id, HttpServletRequest request) {
+    public BaseResponse<Boolean> publishNotice(@RequestBody Integer id) {
         if (id == null || id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

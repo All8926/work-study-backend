@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,7 @@ public class JobPostAddRequest implements Serializable {
     /**
      * 岗位名称
      */
+    @NotNull(message = "岗位名称不能为空")
     private String title;
 
     /**
@@ -31,6 +34,7 @@ public class JobPostAddRequest implements Serializable {
     /**
      * 工资
      */
+    @NotBlank(message = "薪资不能为空")
     private String salary;
 
     /**
@@ -41,6 +45,7 @@ public class JobPostAddRequest implements Serializable {
     /**
      * 工作地点
      */
+    @NotBlank(message = "工作地点不能为空")
     private String workAddress;
 
     /**
