@@ -71,20 +71,39 @@ create table if not exists feedback
 use work_study;
 create table if not exists job_post
 (
-    id          bigint auto_increment comment 'id' primary key,
-    userId      bigint                             not null comment '创建人Id',
-    title       varchar(256)                       not null comment '岗位名称',
-    description varchar(1024)                      null comment '岗位描述',
-    salary      varchar(128)                       not null comment '工资',
-    requirement varchar(512)                       null comment '任职要求',
-    workAddress  varchar(256)                       null comment '工作地点',
-    maxCount    int                                null comment '招聘人数',
-    expirationTime    datetime                           null comment '截止时间',
-    status      tinyint  default 0                 not null comment '0-待审核 1-已发布 2-已下线 3-审核不通过',
-    rejectReason varchar(256)                      null comment '拒绝原因',
-    createTime  datetime default CURRENT_TIMESTAMP not null comment '创建时间',
-    updateTime  datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete    tinyint  default 0                 not null comment '是否删除'
+    id             bigint auto_increment comment 'id' primary key,
+    userId         bigint                             not null comment '创建人Id',
+    title          varchar(256)                       not null comment '岗位名称',
+    description    varchar(1024)                      null comment '岗位描述',
+    salary         varchar(128)                       not null comment '工资',
+    requirement    varchar(512)                       null comment '任职要求',
+    workAddress    varchar(256)                       null comment '工作地点',
+    maxCount       int                                null comment '招聘人数',
+    expirationTime datetime                           null comment '截止时间',
+    status         tinyint  default 0                 not null comment '0-待审核 1-已发布 2-已下线 3-审核不通过',
+    rejectReason   varchar(256)                       null comment '拒绝原因',
+    createTime     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete       tinyint  default 0                 not null comment '是否删除'
 ) comment '岗位信息' collate = utf8mb4_unicode_ci;
+
+-- 岗位申请表
+use work_study;
+create table job_application
+(
+    id            bigint auto_increment comment 'id' primary key,
+    jobId         bigint                             not null comment '岗位ID',
+    userId        bigint                             not null comment '用户ID',
+    enterpriseId   bigint                             not null comment '企业ID',
+    interviewTime datetime                           null comment '面试时间',
+    status        tinyint  default 0                 not null comment '0-待审核 1-已通过 2-已拒绝',
+    fileList      varchar(1024)                      null comment '附件列表',
+    remark        varchar(256)                       null comment '备注信息',
+    auditExplain  varchar(256)                       null comment '审核说明',
+    createTime    datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete      tinyint  default 0                 not null comment '是否删除'
+) comment '岗位申请' collate = utf8mb4_unicode_ci;
+
 
 

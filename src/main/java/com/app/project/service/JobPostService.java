@@ -30,4 +30,11 @@ public interface JobPostService extends IService<JobPost> {
      * @return
      */
     Page<JobPostVO> getJobPostVOPage(Page<JobPost> jobPostPage);
+
+    /**
+     * 获取岗位VO
+     * @param jobPost
+     * @return
+     */
+    JobPostVO getJobPostVO(JobPost jobPost);
 }

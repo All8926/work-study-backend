@@ -11,6 +11,7 @@ import com.app.project.model.entity.User;
 import com.app.project.model.enums.JobPostStatusEnum;
 import com.app.project.model.vo.JobPostVO;
 import com.app.project.model.vo.JobPostVO;
+import com.app.project.model.vo.UserVO;
 import com.app.project.service.JobPostService;
 
 import com.app.project.service.UserService;
@@ -122,6 +123,20 @@ public class JobPostServiceImpl extends ServiceImpl<JobPostMapper, JobPost>
 
         jobPostVOPage.setRecords(jobPostVOList);
         return jobPostVOPage;
+    }
+
+    @Override
+    public JobPostVO getJobPostVO(JobPost jobPost) {
+        if(jobPost == null){
+            return null;
+        }
+        JobPostVO jobPostVO = new JobPostVO();
+        Long userId = jobPost.getUserId();
+        User user = userService.getById(userId);
+        UserVO userVO = userService.getUserVO(user);
+        BeanUtils.copyProperties(jobPost, jobPostVO);
+        jobPostVO.setUser(userVO);
+        return jobPostVO;
     }
 }
 
