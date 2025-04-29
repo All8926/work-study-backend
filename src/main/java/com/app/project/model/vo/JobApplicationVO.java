@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 投诉视图
+ * 申请记录视图
  *
  * @author
  * @from
@@ -63,7 +63,7 @@ public class JobApplicationVO implements Serializable {
     private Date interviewTime;
 
     /**
-     * 0-待审核 1-已通过 2-已拒绝
+     *0-待审核 1-审核拒绝 2-待面试 3-面试不通过 4-面试通过
      */
     private Integer status;
 

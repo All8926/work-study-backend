@@ -89,14 +89,14 @@ create table if not exists job_post
 
 -- 岗位申请表
 use work_study;
-create table job_application
+create table if not exists job_application
 (
     id            bigint auto_increment comment 'id' primary key,
     jobId         bigint                             not null comment '岗位ID',
     userId        bigint                             not null comment '用户ID',
-    enterpriseId   bigint                             not null comment '企业ID',
+    enterpriseId  bigint                             not null comment '企业ID',
     interviewTime datetime                           null comment '面试时间',
-    status        tinyint  default 0                 not null comment '0-待审核 1-已通过 2-已拒绝',
+    status        tinyint  default 0                 not null comment '0-待审核 1-审核拒绝 2-待面试 3-面试不通过 4-面试通过',
     fileList      varchar(1024)                      null comment '附件列表',
     remark        varchar(256)                       null comment '备注信息',
     auditExplain  varchar(256)                       null comment '审核说明',
@@ -104,6 +104,24 @@ create table job_application
     updateTime    datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete      tinyint  default 0                 not null comment '是否删除'
 ) comment '岗位申请' collate = utf8mb4_unicode_ci;
+
+-- 录用记录表
+use work_study;
+create table if not exists hiring_record
+(
+    id           bigint auto_increment comment 'id' primary key,
+    userId       bigint                             not null comment '用户Id',
+    enterPriseId bigint                             not null comment '企业Id',
+    jobPostId    bigint                             not null comment '岗位Id',
+    hireDate     datetime                           not null comment '入职日期',
+    leaveDate    datetime                           null comment '离职日期',
+    fileList     varchar(1024)                      null comment '附件地址',
+    status       tinyint  default 0 comment '0-在职 1-离职',
+    remark       varchar(256)                       null comment '备注',
+    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint  default 0                 not null comment '是否删除'
+);
 
 
 

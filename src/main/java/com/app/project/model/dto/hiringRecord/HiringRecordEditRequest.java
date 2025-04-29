@@ -1,4 +1,4 @@
-package com.app.project.model.dto.jobApplication;
+package com.app.project.model.dto.hiringRecord;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,14 +11,13 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 编辑岗位申请记录请求
+ * 编辑录用记录请求
  *
  * @author
  * @from
  */
 @Data
-public class JobApplicationEditRequest implements Serializable {
-
+public class HiringRecordEditRequest implements Serializable {
 
     /**
      * id
@@ -26,21 +25,27 @@ public class JobApplicationEditRequest implements Serializable {
     @NotNull(message = "id不能为空")
     private Long id;
 
-    /**
-     * 面试时间
-     */
-    private Date interviewTime;
 
     /**
-     * 附件列表
+     * 附件地址
      */
     private List<Object> fileList;
 
+    /**
+     * 0-在职 1-离职
+     */
+    private Integer status;
 
     /**
-     * 备注信息
+     * 离职时间
+     */
+    private Date leaveDate;
+
+    /**
+     * 备注
      */
     private String remark;
+
 
 
     private static final long serialVersionUID = 1L;

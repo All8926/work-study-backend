@@ -7,13 +7,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 岗位申请
- * @TableName job_application
+ * 
+ * @TableName hiring_record
  */
-@TableName(value ="job_application")
+@TableName(value ="hiring_record")
 @Data
-public class JobApplication implements Serializable {
-
+public class HiringRecord implements Serializable {
     /**
      * id
      */
@@ -21,45 +20,44 @@ public class JobApplication implements Serializable {
     private Long id;
 
     /**
-     * 岗位ID
-     */
-    private Long jobId;
-
-    /**
-     * 用户ID
+     * 用户Id
      */
     private Long userId;
 
     /**
-     * 企业用户id
+     * 企业Id
      */
-    private Long enterpriseId;
-
+    private Long enterPriseId;
 
     /**
-     * 面试时间
+     * 岗位id
      */
-    private Date interviewTime;
+    private Long jobPostId;
 
     /**
-     * 0-待审核 1-审核拒绝 2-待面试 3-面试不通过 4-面试通过
+     * 入职日期
      */
-    private Integer status;
+    private Date hireDate;
 
     /**
-     * 附件列表
+     * 离职日期
+     */
+    private Date leaveDate;
+
+    /**
+     * 附件地址
      */
     private String fileList;
 
     /**
-     * 备注信息
+     * 0-在职 1-离职
      */
-    private String remark;
+    private Integer status;
 
     /**
-     * 审核说明
+     * 备注
      */
-    private String auditExplain;
+    private String remark;
 
     /**
      * 创建时间

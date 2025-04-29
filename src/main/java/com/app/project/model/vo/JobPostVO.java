@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 投诉视图
+ * 岗位视图
  *
  * @author
  * @from

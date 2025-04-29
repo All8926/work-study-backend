@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.project.mapper.HiringRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.app.project.model.entity.HiringRecord">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="enterPriseId" column="enterPriseId" jdbcType="BIGINT"/>
+            <result property="jobPostId" column="jobPostId" jdbcType="BIGINT"/>
+            <result property="hireDate" column="hireDate" jdbcType="TIMESTAMP"/>
+            <result property="leaveDate" column="leaveDate" jdbcType="TIMESTAMP"/>
+            <result property="fileList" column="fileList" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,userId,enterPriseId,jobPostId,
+        hireDate,leaveDate,fileList,remark,
+        status,createTime,updateTime,
+        isDelete
+    </sql>
+</mapper>

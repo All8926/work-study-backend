@@ -5,9 +5,12 @@ import com.app.project.model.dto.jobApplication.JobApplicationQueryRequest;
 import com.app.project.model.entity.JobApplication;
 import com.app.project.model.entity.User;
 import com.app.project.model.vo.JobApplicationVO;
+import com.app.project.model.vo.UserVO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author Administrator
@@ -30,4 +33,12 @@ public interface JobApplicationService extends IService<JobApplication> {
      * @return
      */
     Page<JobApplicationVO> getJobApplicationVOPage(Page<JobApplication> jobApplicationPage);
+
+    /**
+     * @description 获取面试通过用户
+     * @author luobin YL586246
+     * @date 2025/4/29 19:50
+     * @return null
+     */
+    List<UserVO> getInterviewPassedUser();
 }

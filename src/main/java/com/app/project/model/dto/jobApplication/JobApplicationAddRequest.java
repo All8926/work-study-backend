@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 创建岗位申请请求
+ * 岗位申请记录请求
  *
  * @author
  * @from

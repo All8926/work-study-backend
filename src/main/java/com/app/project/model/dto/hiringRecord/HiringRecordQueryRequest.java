@@ -1,4 +1,4 @@
-package com.app.project.model.dto.jobApplication;
+package com.app.project.model.dto.hiringRecord;
 
 import com.app.project.common.PageRequest;
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -11,14 +11,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 查询岗位申请记录请求
+ * 查询录用记录请求
  *
  * @author
  * @from
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class JobApplicationQueryRequest extends PageRequest implements Serializable {
+public class HiringRecordQueryRequest extends PageRequest implements Serializable {
 
     /**
      * id
@@ -26,15 +26,27 @@ public class JobApplicationQueryRequest extends PageRequest implements Serializa
     private Long id;
 
     /**
-     * 岗位名称
+     * 用户名字
      */
-    private String jobName;
+    private String userName;
 
 
     /**
-     * 0-待审核 1-审核拒绝 2-待面试 3-面试不通过 4-面试通过
+     * 入职日期
+     */
+    private Date hireDate;
+
+
+    /**
+     * 0-在职 1-离职
      */
     private Integer status;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
 
     private static final long serialVersionUID = 1L;
 }

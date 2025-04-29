@@ -9,8 +9,10 @@ import com.app.project.model.entity.JobApplication;
 import com.app.project.model.entity.JobApplication;
 import com.app.project.model.entity.JobPost;
 import com.app.project.model.entity.User;
+import com.app.project.model.enums.JobApplicationStatusEnum;
 import com.app.project.model.vo.JobApplicationVO;
 import com.app.project.model.vo.JobApplicationVO;
+import com.app.project.model.vo.UserVO;
 import com.app.project.service.JobApplicationService;
 
 import com.app.project.service.JobPostService;
@@ -25,10 +27,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -131,6 +130,27 @@ public class JobApplicationServiceImpl extends ServiceImpl<JobApplicationMapper,
 
         jobApplicationVOPage.setRecords(jobApplicationVOList);
         return jobApplicationVOPage;
+    }
+
+    @Override
+    public List<UserVO> getInterviewPassedUser() {
+
+        User loginUser = userService.getLoginUser();
+        String userRole = loginUser.getUserRole();
+        List<UserVO> userVOList = new ArrayList<>();
+
+        // 获取本公司所有通过面试申请的用户
+        QueryWrapper<JobApplication> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("enterpriseId", loginUser.getId());
+        queryWrapper.eq("status", JobApplicationStatusEnum.INTERVIEW_PASSED.getValue());
+        List<JobApplication> jobApplicationList = list(queryWrapper);
+        if (CollUtil.isEmpty(jobApplicationList)) {
+            return userVOList;
+        }
+        Set<Long> userIdSet = jobApplicationList.stream().map(JobApplication::getUserId).collect(Collectors.toSet());
+        List<User> userList = userService.listByIds(userIdSet);
+        userVOList = userService.getUserVO(userList);
+        return userVOList;
     }
 
 }

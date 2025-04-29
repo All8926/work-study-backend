@@ -13,17 +13,17 @@ import com.app.project.model.entity.JobApplication;
 import com.app.project.model.entity.JobPost;
 import com.app.project.model.entity.User;
 import com.app.project.model.enums.AddStatusEnum;
+import com.app.project.model.enums.JobApplicationStatusEnum;
 import com.app.project.model.vo.JobApplicationVO;
+import com.app.project.model.vo.UserVO;
 import com.app.project.service.JobApplicationService;
 import com.app.project.service.JobPostService;
 import com.app.project.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +65,7 @@ public class JobApplicationController {
     @PostMapping("/add")
     public BaseResponse<Long> addJobApplication(@Valid @RequestBody JobApplicationAddRequest jobApplicationAddRequest) {
         ThrowUtils.throwIf(jobApplicationAddRequest == null, ErrorCode.PARAMS_ERROR);
+        User loginUser = userService.getLoginUser();
         // 处将实体类和 DTO 进行转换
         JobApplication jobApplication = new JobApplication();
         BeanUtils.copyProperties(jobApplicationAddRequest, jobApplication);
@@ -74,8 +75,14 @@ public class JobApplicationController {
         JobPost jobPost = jobPostService.getById(jobId);
         ThrowUtils.throwIf(jobPost == null, ErrorCode.NOT_FOUND_ERROR,"岗位不存在");
 
+        // 是否重复申请
+        QueryWrapper<JobApplication> jobApplicationQueryWrapper = new QueryWrapper<>();
+        jobApplicationQueryWrapper.eq("jobId", jobId)
+                .eq("userId", loginUser.getId());
+        long count = jobApplicationService.count(jobApplicationQueryWrapper);
+        ThrowUtils.throwIf(count > 0, ErrorCode.OPERATION_ERROR,"您已申请过该岗位，请勿重复申请");
+
         //  填充userId
-        User loginUser = userService.getLoginUser();
         jobApplication.setUserId(loginUser.getId());
         jobApplication.setEnterpriseId(jobPost.getUserId());
 
@@ -124,25 +131,43 @@ public class JobApplicationController {
      * @return
      */
     @PostMapping("/audit")
-    @SaCheckRole(UserConstant.ADMIN_ROLE)
+    @SaCheckRole(UserConstant.ENTERPRISE_ROLE)
     public BaseResponse<Boolean> auditJobApplication(@Valid @RequestBody AuditRequest auditRequest) {
         if (auditRequest == null || auditRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
-        // 判断是否存在
+        // 1.判断申请记录是否存在
         long id = auditRequest.getId();
         JobApplication oldJobApplication = jobApplicationService.getById(id);
         ThrowUtils.throwIf(oldJobApplication == null, ErrorCode.NOT_FOUND_ERROR);
 
-        // 只能更新待处理状态的
-        ThrowUtils.throwIf(!Objects.equals(oldJobApplication.getStatus(), AddStatusEnum.IN_REVIEW.getValue()), ErrorCode.OPERATION_ERROR, "状态未在审核中");
-
-        oldJobApplication.setStatus(auditRequest.getStatus());
+         Integer status = oldJobApplication.getStatus();
+        // 2.审核
+        if(Objects.equals(status, JobApplicationStatusEnum.IN_REVIEW.getValue())){
+            // 面试申请审核
+            if(auditRequest.getStatus() == RESOLVED_STATUS){
+                oldJobApplication.setStatus(JobApplicationStatusEnum.IN_INTERVIEW.getValue());
+            }
+            if(auditRequest.getStatus() == REJECTED_STATUS){
+                oldJobApplication.setStatus(JobApplicationStatusEnum.REJECTED.getValue());
+            }
+        }else if(Objects.equals(status, JobApplicationStatusEnum.IN_INTERVIEW.getValue())){
+            // 面试结果审核
+            if(auditRequest.getStatus() == RESOLVED_STATUS){
+                oldJobApplication.setStatus(JobApplicationStatusEnum.INTERVIEW_PASSED.getValue());
+            }
+            if(auditRequest.getStatus() == REJECTED_STATUS){
+                oldJobApplication.setStatus(JobApplicationStatusEnum.INTERVIEW_FAILED.getValue());
+            }
+        }else {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "无需审核");
+        }
+        // 3.填充审核说明
         oldJobApplication.setAuditExplain(auditRequest.getReason());
 
 
-        // 操作数据库
+        // 4.操作数据库
         boolean result = jobApplicationService.updateById(oldJobApplication);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
@@ -202,10 +227,27 @@ public class JobApplicationController {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "已处理，不可编辑");
         }
 
+        // 转为json字符串，填充文件列表,
+        List<Object> fileList = jobApplicationEditRequest.getFileList();
+        if(fileList != null){
+            jobApplication.setFileList(JSONUtil.toJsonStr(fileList));
+        }
+
         // 操作数据库
         boolean result = jobApplicationService.updateById(jobApplication);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+    /**
+     * @description 获取面试通过的用户
+     * @author luobin YL586246
+     * @date 2025/4/29 19:49
+     */
+    @GetMapping("/get/interview/passed")
+    public BaseResponse<List<UserVO>> getInterviewPassedUser() {
+        List<UserVO> userVOList = jobApplicationService.getInterviewPassedUser();
+        return ResultUtils.success(userVOList);
     }
 
 
