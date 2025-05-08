@@ -13,6 +13,7 @@ import com.app.project.model.entity.*;
 import com.app.project.model.entity.HiringRecord;
 import com.app.project.model.enums.JobApplicationStatusEnum;
 import com.app.project.model.vo.HiringRecordVO;
+import com.app.project.model.vo.UserVO;
 import com.app.project.service.HiringRecordService;
 
 import com.app.project.service.JobApplicationService;
@@ -91,7 +92,7 @@ public class HiringRecordServiceImpl extends ServiceImpl<HiringRecordMapper, Hir
         // 企业用户只能获取自己的录用记录
         String userRole = loginUser.getUserRole();
         if (userRole.equals(UserConstant.ENTERPRISE_ROLE)) {
-            queryWrapper.eq("enterpriseId", loginUser.getId());
+            queryWrapper.eq("enterPriseId", loginUser.getId());
         }
 
         // 用户只能获取自己申请的
@@ -162,7 +163,7 @@ public class HiringRecordServiceImpl extends ServiceImpl<HiringRecordMapper, Hir
         // 用户是否面试通过
         QueryWrapper<JobApplication> jobApplicationQueryWrapper = new QueryWrapper<>();
         jobApplicationQueryWrapper.eq("userId", hiringUserId)
-                .eq("enterpriseId", loginUser.getId())
+                .eq("enterPriseId", loginUser.getId())
                 .eq("status", JobApplicationStatusEnum.INTERVIEW_PASSED.getValue());
         JobApplication jobApplication = jobApplicationService.getOne(jobApplicationQueryWrapper);
         ThrowUtils.throwIf(jobApplication == null, ErrorCode.OPERATION_ERROR,"未查询到用户面试通过记录");
@@ -188,6 +189,29 @@ public class HiringRecordServiceImpl extends ServiceImpl<HiringRecordMapper, Hir
         boolean result = this.save(hiringRecord);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return true;
+    }
+
+    @Override
+    public List<UserVO> getUserList() {
+
+        User loginUser = userService.getLoginUser();
+        List<UserVO> userVOList = new ArrayList<>();
+
+        // 获取本公司所有在职的用户
+        QueryWrapper<HiringRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("enterPriseId", loginUser.getId());
+        queryWrapper.eq("status", 0);
+        List<HiringRecord> hiringRecordList = list(queryWrapper);
+        if (CollUtil.isEmpty(hiringRecordList)) {
+            return userVOList;
+        }
+        // 获取用户id
+        Set<Long> userIdSet = hiringRecordList.stream().map(HiringRecord::getUserId).collect(Collectors.toSet());
+        // 获取用户信息
+        List<User> userList = userService.listByIds(userIdSet);
+        userVOList = userService.getUserVO(userList);
+        return userVOList;
+
     }
 }
 

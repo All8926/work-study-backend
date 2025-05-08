@@ -148,6 +148,9 @@ public class UserController {
         if (deleteRequest == null || deleteRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        User user = userService.getById(deleteRequest.getId());
+        ThrowUtils.throwIf(user == null, ErrorCode.NOT_FOUND_ERROR,"用户不存在");
+        ThrowUtils.throwIf(user.getUserAccount().equals("admin"), ErrorCode.FORBIDDEN_ERROR, "禁止删除超级管理员");
         boolean b = userService.removeById(deleteRequest.getId());
         return ResultUtils.success(b);
     }
@@ -156,17 +159,18 @@ public class UserController {
      * 更新用户
      *
      * @param userUpdateRequest
-     * @param request
      * @return
      */
     @PostMapping("/update")
     @SaCheckRole(UserConstant.ADMIN_ROLE)
-    public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest,
-            HttpServletRequest request) {
+    public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest ) {
         if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User user = new User();
+        User user = userService.getById(userUpdateRequest.getId());
+        ThrowUtils.throwIf(user == null, ErrorCode.NOT_FOUND_ERROR,"用户不存在");
+        ThrowUtils.throwIf(user.getUserAccount().equals("admin") && userUpdateRequest.getUserRole() != null && !userUpdateRequest.getUserRole().equals(UserConstant.ADMIN_ROLE), ErrorCode.FORBIDDEN_ERROR, "禁止修改超级管理员权限");
+
         BeanUtils.copyProperties(userUpdateRequest, user);
         boolean result = userService.updateById(user);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);

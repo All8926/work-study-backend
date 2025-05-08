@@ -27,12 +27,6 @@ create table if not exists `user`
     index idx_userAccount (userAccount)
 ) comment '用户' collate = utf8mb4_unicode_ci;
 
-insert into `user` (`id`, `userAccount`, `userPassword`, `userRole`, `userName`, `nickName`, `userPhone`, `userAvatar`,
-                    `userProfile`, `status`, `createTime`, `updateTime`, `isDelete`)
-values ('2', 'admin', '5cf1113b32bbf0dacb4f4262cd3b296c', 'admin', 'admin', '超级管理员', '18596965656', NULL, NULL,
-        '1', '2025-04-22 20:34:55', '2025-04-22 20:37:49', '0');
-
-
 -- 公告表
 use work_study;
 create table if not exists notice
@@ -121,7 +115,41 @@ create table if not exists hiring_record
     createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete     tinyint  default 0                 not null comment '是否删除'
-);
+) comment '录用记录' collate = utf8mb4_unicode_ci;
+
+-- 薪酬表
+create table if not exists salary
+(
+    id           bigint auto_increment comment 'id' primary key,
+    userId       bigint                             not null comment '用户Id',
+    enterPriseId bigint                             not null comment '企业Id',
+    salaryType   varchar(32)                        not null comment '0-日结 1-周结 2-月结',
+    periodDate   varchar(32)                        not null comment '结算周期',
+    workDuration varchar(32)                        null comment '出勤时长',
+    performance  varchar(32)                        null comment '绩效等级：A/B/C等',
+    salaryAmount varchar(32)                        not null comment '实发工资',
+    issueStatus  tinyint  default 0                 not null comment '0-未发 1-已发',
+    issueTime    datetime                           null comment '发放时间',
+    createTime   datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime   datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint  default 0                 not null comment '是否删除'
+) comment '薪酬' collate = utf8mb4_unicode_ci;
+
+-- 考勤表
+create table if not exists attendance
+(
+    id             bigint auto_increment comment 'id' primary key,
+    userId         bigint                             not null comment '用户Id',
+    enterPriseId   bigint                             not null comment '企业Id',
+    attendanceDate date                               not null comment '考勤日期',
+    checkInTime    varchar(32)                        null COMMENT '上班打卡时间',
+    checkOutTime   varchar(32)                        null COMMENT '下班打卡时间',
+    workDuration   varchar(32)                        null comment '工作时长',
+    status         tinyint  default 0                 not null comment '0-正常 1-迟到 2-早退 3-旷工 4-请假',
+    createTime     datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime     datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete       tinyint  default 0                 not null comment '是否删除'
+) comment '考勤' collate = utf8mb4_unicode_ci;
 
 
 

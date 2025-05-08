@@ -10,6 +10,7 @@ import com.app.project.model.dto.hiringRecord.HiringRecordQueryRequest;
 import com.app.project.model.entity.HiringRecord;
 import com.app.project.model.entity.User;
 import com.app.project.model.vo.HiringRecordVO;
+import com.app.project.model.vo.UserVO;
 import com.app.project.service.HiringRecordService;
 import com.app.project.service.JobPostService;
 import com.app.project.service.UserService;
@@ -150,6 +151,18 @@ public class HiringRecordController {
         boolean result = hiringRecordService.updateById(hiringRecord);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
         return ResultUtils.success(true);
+    }
+
+
+    /**
+     * @description 获取在职的用户
+     * @author luobin YL586246
+     * @date 2025/4/29 19:49
+     */
+    @GetMapping("/get/user")
+    public BaseResponse<List<UserVO>> getUserList() {
+        List<UserVO> userVOList = hiringRecordService.getUserList();
+        return ResultUtils.success(userVOList);
     }
 
 

@@ -16,10 +16,15 @@ import javax.validation.constraints.Size;
 public class UserAddRequest implements Serializable {
 
     /**
-     * 用户昵称
+     * 用户姓名
      */
     @Size(max = 10, message = "不能超过10个字符")
     private String userName;
+    /**
+     * 用户昵称
+     */
+    @Size(max = 10, message = "不能超过10个字符")
+    private String nickName;
 
     /**
      * 账号
@@ -34,9 +39,25 @@ public class UserAddRequest implements Serializable {
     private String userAvatar;
 
     /**
+     * 手机号
+     */
+    private String userPhone;
+
+    /**
+     * 状态
+     */
+    private Integer status;
+
+    /**
      * 用户角色: user, admin
      */
     private String userRole;
+
+    /**
+     * 用户简介
+     */
+    @Size(max = 200, message = "用户简介过长")
+    private String userProfile;
 
     private static final long serialVersionUID = 1L;
 }
